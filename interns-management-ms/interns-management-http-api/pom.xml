@@ -24,7 +24,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>me.moros</groupId>
+            <artifactId>storage</artifactId>
+            <version>2.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>

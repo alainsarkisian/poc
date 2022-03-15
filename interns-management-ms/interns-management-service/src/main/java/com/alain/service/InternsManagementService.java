@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.logging.Logger;
 
 @Component
@@ -37,7 +38,4 @@ public class InternsManagementService {
     public void addAnIntern2(com.alain.model.Intern internEntity){
         this.internsManagementServiceRepository.save(internEntity);
     }
-
-
-
 }
