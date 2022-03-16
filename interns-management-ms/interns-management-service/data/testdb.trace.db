@@ -1,0 +1,4 @@
+2022-03-16 15:53:56 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INTER" non trouvée
+Table "INTER" not found; SQL statement:
+select * from inter [42102-200]
