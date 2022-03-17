@@ -11,15 +11,33 @@ import java.util.logging.Logger;
 @Component
 public class JmsProducer {
 
-    @Autowired
-    @Qualifier("MyQueueProducerTemplate")
-    private JmsTemplate jmsTemplate;
-
     final Logger logger = Logger.getLogger(String.valueOf(JmsProducer.class));
 
+    @Autowired
+    @Qualifier("PostRequestProducer")
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
+    @Qualifier("GetByIdRequestProducer")
+    private JmsTemplate jmsTemplateForGet;
+
+    /*
+        Produce for post
+     */
     public void sendMessage(Intern internJson) {
         com.alain.dto.Intern internXml = InternMapper.MAPPER.fromJsonToXmlIntern(internJson);
         jmsTemplate.convertAndSend(internXml);
-        logger.info("I just sent a new intern " +"First_Name : " + internXml.getFirstName() + " | Last_Name : " + internXml.getLastName() +" to the BROKER]");
+        logger.info("[PRODUCING : POST] {" +
+                "First_Name : " + internXml.getFirstName() +
+                ", Last_Name : " + internXml.getLastName() +"}");
+    }
+
+    /*
+        Produce for get
+     */
+    public void sendMessageForGetById(com.alain.dto.Intern internXml) {
+        jmsTemplateForGet.convertAndSend(internXml);
+        logger.info("[PRODUCING : GET] {" +
+                "Intern_ID : " + internXml.getIdIntern() + "}");
     }
 }

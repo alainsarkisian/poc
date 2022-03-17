@@ -6,6 +6,7 @@ import com.alain.service.InternsManagementHttpApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RequestMapping("api/v1/interns-management-ms/")
@@ -15,33 +16,40 @@ public class InternsManagementHttpApiController {
     @Autowired
     private InternsManagementHttpApiService internsManagementHttpApiService;
 
-    @GetMapping("interns")
+    @GetMapping("internss")
     public List<Intern> getAllInterns() {
         return this.internsManagementHttpApiService.getAllInterns();
     }
 
-    @GetMapping("intern/{firstName}")
+    @GetMapping("interns/{id}")
+    public Intern getAnInternById(@PathVariable Long id){
+        return this.internsManagementHttpApiService.getAnInternById(id);
+    }
+
+    /*
+    @GetMapping("interns/{firstName}")
     public Intern getAnInternByFirstName(@PathVariable String firstName){
         return this.internsManagementHttpApiService.getAnInternByFirstName(firstName);
     }
+    */
 
-    @GetMapping("intern")
+    @GetMapping("interns")
     public Intern getAnInternByFirstNameUsingRequestParam(@RequestParam String firstName){
         return this.internsManagementHttpApiService.getAnInternByFirstName(firstName);
     }
 
-    @PostMapping("intern")
+    @PostMapping("interns")
     public String addAnIntern(@RequestBody Intern intern) {
         this.internsManagementHttpApiService.addAnIntern(intern);
         return "Your resquest has been taken in account";
     }
 
-    @DeleteMapping("intern/{idIntern}")
+    @DeleteMapping("interns/{idIntern}")
     public void deleteAnIntern(@PathVariable Long idIntern) {
         this.internsManagementHttpApiService.deleteAnIntern(idIntern);
     }
 
-    @PutMapping("intern")
+    @PutMapping("interns")
     public void updateAnIntern(@RequestBody Intern intern){
         this.internsManagementHttpApiService.updateAnIntern(intern);
     }

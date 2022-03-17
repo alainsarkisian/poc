@@ -12,4 +12,9 @@ public interface InternMapper {
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target= "lastName")
     com.alain.model.Intern fromXmlToEntityIntern(Intern intern);
+
+    @Mapping(source = "idIntern", target = "idIntern")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target= "lastName")
+    Intern fromEntityInternToXml(com.alain.model.Intern intern);
 }
