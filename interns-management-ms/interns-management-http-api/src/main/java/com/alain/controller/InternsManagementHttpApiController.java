@@ -22,7 +22,7 @@ public class InternsManagementHttpApiController {
 
     @GetMapping("interns/{id}")
     public Intern getAnInternById(@PathVariable Long id) throws InterruptedException {
-        return this.internsManagementHttpApiService.getAnInternById(id);
+        return this.internsManagementHttpApiService.getAnInternByIdInCacheOrDb(id);
     }
 
     /*

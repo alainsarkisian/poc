@@ -41,9 +41,7 @@ public class InternsManagementHttpApiService {
             isUpdated = true;
         }
         catch (Exception e){
-            System.out.println("add cache");
             e.printStackTrace();
-
         }
             return isUpdated;
     }
@@ -60,10 +58,11 @@ public class InternsManagementHttpApiService {
                     ", Last_Name : " + intern.getLastName() +"}");
             return intern;
         }
-        catch (Exception e){
-            logger.warning("CACHE IS EMPTY");
+        catch (NullPointerException e){
+            com.alain.dto.Intern intern = new com.alain.dto.Intern();
+            intern.setIdIntern(BigInteger.valueOf(0));
+            return intern;
         }
-        return null;
     }
 
     /*
@@ -98,15 +97,27 @@ public class InternsManagementHttpApiService {
         return finalResult;
     }
 
-    public void deleteAnIntern(Long idIntern) {
+    public Intern getAnInternByIdInCacheOrDb(Long id) throws InterruptedException {
+        com.alain.dto.Intern isInternPresentInCache = this.getCacheValue(BigInteger.valueOf(id));
+        if(isInternPresentInCache.getIdIntern() != BigInteger.valueOf(0)){
+            System.out.println(isInternPresentInCache.getIdIntern());
+            System.out.println(BigInteger.valueOf(0));
+            logger.info("[CACHE] INTERN ALREADY IN CACHE");
+            Intern finalResult = InternMapper.MAPPER.fromXmlToJsonIntern(isInternPresentInCache);
+            return finalResult;
+        }
+        else {
+            logger.info("[CACHE] INTERN NOT IN CACHE");
+            return this.getAnInternById(id);
+        }
     }
+
+    public void deleteAnIntern(Long idIntern) {}
 
     public void updateAnIntern(Intern intern) {
     }
 
-    public List<Intern> getAllInterns() {
-        return null;
-    }
+    public List<Intern> getAllInterns() {return null;}
 
     public Intern getAnInternByFirstName(String firstName){
         return null;
