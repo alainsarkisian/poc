@@ -72,5 +72,4 @@ public class JmsConfig {
         factory.setMessageConverter(converter);
         return factory;
     }
-
 }

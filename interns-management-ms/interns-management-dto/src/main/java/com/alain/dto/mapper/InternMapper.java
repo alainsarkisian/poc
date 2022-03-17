@@ -8,8 +8,13 @@ import org.mapstruct.factory.Mappers;
 public interface InternMapper {
     InternMapper MAPPER = Mappers.getMapper( InternMapper.class );
 
+    @Mapping(source = "idInter", target = "idIntern")
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target = "lastName")
     Intern fromJsonToXmlIntern(com.alain.dto.json.Intern intern);
 
+    @Mapping(source = "idIntern", target = "idInter")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
+    com.alain.dto.json.Intern fromXmlToJsonIntern(Intern intern);
 }

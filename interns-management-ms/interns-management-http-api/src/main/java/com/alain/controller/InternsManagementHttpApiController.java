@@ -1,12 +1,11 @@
 package com.alain.controller;
 
-
 import com.alain.dto.json.Intern;
 import com.alain.service.InternsManagementHttpApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
+
 import java.util.List;
 
 @RequestMapping("api/v1/interns-management-ms/")
@@ -22,7 +21,7 @@ public class InternsManagementHttpApiController {
     }
 
     @GetMapping("interns/{id}")
-    public Intern getAnInternById(@PathVariable Long id){
+    public Intern getAnInternById(@PathVariable Long id) throws InterruptedException {
         return this.internsManagementHttpApiService.getAnInternById(id);
     }
 
