@@ -58,7 +58,7 @@ public class JmsConfig {
     /*
         Consume for get response
     */
-    @Bean("MyHttpApiQueueConsumer")
+    @Bean("GetByIdResponseConsumer")
     public DefaultJmsListenerContainerFactory myQueueConsumerJmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);

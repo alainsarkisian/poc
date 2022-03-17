@@ -67,15 +67,30 @@ public class InternsManagementService {
     /*
         Consume from Get request Queue
     */
-    @JmsListener(destination = "GetByIdRequestQueue", containerFactory = "GetByIdConsumer")
+    @JmsListener(destination = "GetByIdRequestQueue", containerFactory = "GetByIdRequestConsumer")
     public void receiveFromGetIdRequest(@Payload Intern internXml) {
+        /*
+        Receiving
+         */
         logger.info("[CONSUMING : GET] {" +
                 "Intern_ID : " + internXml.getIdIntern() + "}");
+        /*
+        Mapping
+         */
         com.alain.model.Intern internEntity = InternMapper.MAPPER.fromXmlToEntityIntern(internXml);
+
+        /*
+        Requesting DB
+         */
         Optional<com.alain.model.Intern> internResultGetById = this.getAnInternById(internEntity.getIdIntern());
         internResultGetById.ifPresent(intern -> logger.info("[SEARCHING IN DB] : FOUND" +
                 ", First_Name : " + intern.getFirstName() +
                 ", Last_Name : " + intern.getLastName() + "}"));
+
+        /*
+        Sending result to the response queue
+         */
+        this.jmsProducer.sendMessage(internResultGetById.get());
     }
 
 

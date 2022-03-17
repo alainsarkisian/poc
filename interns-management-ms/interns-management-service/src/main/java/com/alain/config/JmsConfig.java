@@ -42,7 +42,7 @@ public class JmsConfig {
     /*
         Consume for Get request
     */
-    @Bean("GetByIdConsumer")
+    @Bean("GetByIdRequestConsumer")
     public DefaultJmsListenerContainerFactory getIdRequestConsumerJmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
@@ -58,12 +58,12 @@ public class JmsConfig {
     }
 
     /*
-        Produce
+        Produce for Get response
     */
-    @Bean("MyMangementServiceQueueProducerTemplate")
+    @Bean("GetByIdResponseProducer")
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setDefaultDestinationName("Response");
+        jmsTemplate.setDefaultDestinationName("GetByIdResponseQueue");
         jmsTemplate.setConnectionFactory(connectionFactory);
         MarshallingMessageConverter converter = new MarshallingMessageConverter();
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();

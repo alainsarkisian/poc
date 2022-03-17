@@ -18,15 +18,18 @@ public class InternsManagementHttpApiService {
 
     @Autowired
     private JmsProducer jmsProducer;
+
     final static Logger logger = Logger.getLogger(String.valueOf(InternsManagementHttpApiService.class));
 
-
-    public List<Intern> getAllInterns() {
-        return null;
-    }
-
-    public Intern getAnInternByFirstName(String firstName){
-        return null;
+    /*
+    Consume from Post request Queue
+ */
+    @JmsListener(destination = "GetByIdResponseQueue", containerFactory = "GetByIdResponseConsumer")
+    public void receiveFromPostRequest(@Payload com.alain.dto.Intern internXml) {
+        logger.info("[CONSUMING : GET] {" +
+                "Intern_ID : " + internXml.getIdIntern() +
+                ", First_Name : " + internXml.getFirstName() +
+                ", Last_Name : " + internXml.getLastName() +"}");
     }
 
     /*
@@ -50,5 +53,13 @@ public class InternsManagementHttpApiService {
     }
 
     public void updateAnIntern(Intern intern) {
+    }
+
+    public List<Intern> getAllInterns() {
+        return null;
+    }
+
+    public Intern getAnInternByFirstName(String firstName){
+        return null;
     }
 }

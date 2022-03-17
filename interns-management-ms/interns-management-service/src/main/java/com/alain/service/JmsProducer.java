@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class JmsProducer {
 
     @Autowired
-    @Qualifier("MyMangementServiceQueueProducerTemplate")
+    @Qualifier("GetByIdResponseProducer")
     private JmsTemplate jmsTemplate;
 
     final Logger logger = Logger.getLogger(String.valueOf(JmsProducer.class));
@@ -20,6 +20,9 @@ public class JmsProducer {
     public void sendMessage(Intern intern) {
         com.alain.dto.Intern internXml = InternMapper.MAPPER.fromEntityInternToXml(intern);
         jmsTemplate.convertAndSend(internXml);
-        logger.info("[PRODUCING : GET] {" + "Intern_ID : " + internXml.getIdIntern()+ ", First_Name : " + internXml.getFirstName() + ", Last_Name : " + internXml.getLastName() +"}");
+        logger.info("[PRODUCING : GET] {" +
+                "Intern_ID : " + internXml.getIdIntern()+ ", " +
+                "First_Name : " + internXml.getFirstName() + ", " +
+                "Last_Name : " + internXml.getLastName() +"}");
     }
 }
