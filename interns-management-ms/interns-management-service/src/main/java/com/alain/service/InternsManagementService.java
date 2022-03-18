@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -82,15 +83,27 @@ public class InternsManagementService {
         /*
         Requesting DB
          */
-        Optional<com.alain.model.Intern> internResultGetById = this.getAnInternById(internEntity.getIdIntern());
-        internResultGetById.ifPresent(intern -> logger.info("[SEARCHING IN DB] : FOUND" +
-                ", First_Name : " + intern.getFirstName() +
-                ", Last_Name : " + intern.getLastName() + "}"));
+        try {
+            Optional<com.alain.model.Intern> internResultGetById = this.getAnInternById(internEntity.getIdIntern());
+            if (internResultGetById.isPresent()) {
+                logger.info("[SEARCHING IN DB] : FOUND" +
+                        ", First_Name : " + internResultGetById.get().getFirstName() +
+                        ", Last_Name : " + internResultGetById.get().getLastName() + "}");
+                /*
+                    Sending result to the response queue
+                */
+                this.jmsProducer.sendMessage(internResultGetById.get());
+            }
+            else {
+                logger.warning("ID DOES NOT EXIST");
+                return;
+            }
+        } catch (Exception e) {
+            logger.warning("ID DOES NOT EXIST");
+            return;
+        }
 
-        /*
-        Sending result to the response queue
-         */
-        this.jmsProducer.sendMessage(internResultGetById.get());
+
     }
 
 

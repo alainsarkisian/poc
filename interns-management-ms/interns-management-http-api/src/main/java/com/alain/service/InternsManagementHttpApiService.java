@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -49,7 +50,7 @@ public class InternsManagementHttpApiService {
     /*
         Find the cache value for a specific input key
      */
-    public com.alain.dto.Intern getCacheValue(BigInteger key){
+    public synchronized com.alain.dto.Intern getCacheValue(BigInteger key){
         try{
             com.alain.dto.Intern intern = this.cacheSingleton.getCache().get(key);
             logger.info("[CACHE] READING " +
@@ -89,10 +90,23 @@ public class InternsManagementHttpApiService {
      */
     public Intern getAnInternById(Long id) throws InterruptedException {
         com.alain.dto.Intern internXml = new com.alain.dto.Intern();
+        com.alain.dto.Intern cacheResult = new com.alain.dto.Intern();
+
         internXml.setIdIntern(BigInteger.valueOf(id));
         this.jmsProducer.sendMessageForGetById(internXml);
-        Thread.sleep(5000);
-        com.alain.dto.Intern cacheResult = this.getCacheValue(BigInteger.valueOf(id));
+
+        long currentTime = System.currentTimeMillis();
+        long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime);
+
+        while(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - timeSeconds < 5  &&
+        this.getCacheValue(BigInteger.valueOf(id)).getIdIntern() == BigInteger.valueOf(0)) {
+            this.getCacheValue(BigInteger.valueOf(id));
+        }
+        cacheResult =  this.getCacheValue(BigInteger.valueOf(id));
+
+        if(cacheResult.getIdIntern() == BigInteger.valueOf(0)) {
+            logger.info("[TIME OUT] OCCURRED");
+        }
         Intern finalResult = InternMapper.MAPPER.fromXmlToJsonIntern(cacheResult);
         return finalResult;
     }
