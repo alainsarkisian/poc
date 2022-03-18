@@ -97,6 +97,10 @@ public class InternsManagementHttpApiService {
         return finalResult;
     }
 
+    /*
+        Check first if the cache got the intern that the client is asking for
+        If not, send the id to the get request queue
+     */
     public Intern getAnInternByIdInCacheOrDb(Long id) throws InterruptedException {
         com.alain.dto.Intern isInternPresentInCache = this.getCacheValue(BigInteger.valueOf(id));
         if(isInternPresentInCache.getIdIntern() != BigInteger.valueOf(0)){
@@ -119,7 +123,5 @@ public class InternsManagementHttpApiService {
 
     public List<Intern> getAllInterns() {return null;}
 
-    public Intern getAnInternByFirstName(String firstName){
-        return null;
-    }
+    public Intern getAnInternByFirstName(String firstName){return null;}
 }

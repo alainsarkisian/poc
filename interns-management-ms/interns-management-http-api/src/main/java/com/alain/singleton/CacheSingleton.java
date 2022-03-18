@@ -28,9 +28,7 @@ public final class CacheSingleton {
         CacheSingleton.INSTANCE = INSTANCE;
     }
 
-    public HashMap<BigInteger, Intern> getCache() {
-        return cache;
-    }
+    public HashMap<BigInteger, Intern> getCache() {return cache;}
 
     public synchronized void setCache(HashMap<BigInteger, Intern> cache) {
         this.cache = cache;
