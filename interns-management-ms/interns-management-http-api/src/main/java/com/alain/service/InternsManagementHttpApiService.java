@@ -68,7 +68,7 @@ public class InternsManagementHttpApiService {
 
     /*
     Consume from Get Response Queue
-    */
+
     @JmsListener(destination = "GetByIdResponseQueue", containerFactory = "GetByIdResponseConsumer")
     public void receiveFromGetRequest(@Payload com.alain.dto.Intern internXml) {
         logger.info("[CONSUMING : GET] {" +
@@ -77,6 +77,8 @@ public class InternsManagementHttpApiService {
                 ", Last_Name : " + internXml.getLastName() +"}");
         this.updateCache(internXml);
     }
+
+     */
 
     /*
     Send to the PostQueue the XML intern that has to be saved in DB
@@ -115,8 +117,10 @@ public class InternsManagementHttpApiService {
         Check first if the cache got the intern that the client is asking for
         If not, send the id to the get request queue
      */
+
+
     public Intern getAnInternByIdInCacheOrDb(Long id) throws InterruptedException {
-        com.alain.dto.Intern isInternPresentInCache = this.getCacheValue(BigInteger.valueOf(id));
+        /*com.alain.dto.Intern isInternPresentInCache = this.getCacheValue(BigInteger.valueOf(id));
         if(isInternPresentInCache.getIdIntern() != BigInteger.valueOf(0)){
             System.out.println(isInternPresentInCache.getIdIntern());
             System.out.println(BigInteger.valueOf(0));
@@ -127,8 +131,15 @@ public class InternsManagementHttpApiService {
         else {
             logger.info("[CACHE] INTERN NOT IN CACHE");
             return this.getAnInternById(id);
-        }
+        }*/
+        com.alain.dto.Intern internXml = new com.alain.dto.Intern();
+        com.alain.dto.Intern cacheResult = new com.alain.dto.Intern();
+
+        internXml.setIdIntern(BigInteger.valueOf(id));
+        this.jmsProducer.sendMessageForGetById(internXml);
+        return null;
     }
+
 
     public void deleteAnIntern(Long idIntern) {}
 

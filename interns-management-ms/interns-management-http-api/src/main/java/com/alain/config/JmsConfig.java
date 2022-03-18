@@ -57,7 +57,7 @@ public class JmsConfig {
 
     /*
         Consume for get response
-    */
+
     @Bean("GetByIdResponseConsumer")
     public DefaultJmsListenerContainerFactory myQueueConsumerJmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -72,4 +72,6 @@ public class JmsConfig {
         factory.setMessageConverter(converter);
         return factory;
     }
+
+     */
 }
