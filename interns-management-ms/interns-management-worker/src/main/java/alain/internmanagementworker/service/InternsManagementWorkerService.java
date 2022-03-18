@@ -32,12 +32,12 @@ public class InternsManagementWorkerService {
         Intern internEntity = InternMapper.MAPPER.fromXmlToEntityIntern(internXml);
         try {
             this.addAnIntern(internEntity);
-            logger.info("AAAAAAAAAAAAAAAAAADDDDDDDDDDDDDDDDEEEEEEEEEEEEEDDDDDD");
-        }
+            logger.info("[CACHE] ADDED {" +
+                    "Intern_ID : " + internXml.getIdIntern() +
+                    ", First_Name : " + internXml.getFirstName() +
+                    ", Last_Name : " + internXml.getLastName() +"}");        }
         catch (Exception e){
             e.printStackTrace();
         }
     }
-
-
 }

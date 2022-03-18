@@ -2,16 +2,14 @@ package com.alain.service;
 
 
 import com.alain.dto.json.Intern;
-import com.alain.dto.mapper.InternMapper;
-import com.alain.singleton.CacheSingleton;
+import com.alain.mapper.InternMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -24,13 +22,14 @@ public class InternsManagementHttpApiService {
     private JmsProducer jmsProducer;
 
     @Autowired
-    private CacheSingleton cacheSingleton;
+    private RedisService redisService;
+    //private CacheSingleton cacheSingleton;
 
     static Logger logger = Logger.getLogger(String.valueOf(InternsManagementHttpApiService.class));
 
     /*
         Add response from Get to the cache
-    */
+
     public synchronized boolean updateCache(com.alain.dto.Intern internXml){
         boolean isUpdated = false;
         try {
@@ -46,23 +45,41 @@ public class InternsManagementHttpApiService {
         }
             return isUpdated;
     }
+     */
 
     /*
         Find the cache value for a specific input key
      */
-    public synchronized com.alain.dto.Intern getCacheValue(BigInteger key){
+    public synchronized com.alain.model.Intern getCacheValue(Long key){
         try{
-            com.alain.dto.Intern intern = this.cacheSingleton.getCache().get(key);
+            Optional<com.alain.model.Intern> intern = this.redisService.getAnInternById(key);
             logger.info("[CACHE] READING " +
-                    "Intern_ID : " + intern.getIdIntern() +
-                    ", First_Name : " + intern.getFirstName() +
-                    ", Last_Name : " + intern.getLastName() +"}");
-            return intern;
+                    "Intern_ID : " + intern.get().getIdIntern()+
+                    ", First_Name : " + intern.get().getFirstName() +
+                    ", Last_Name : " + intern.get().getLastName() +"}");
+            if(intern.isPresent()){
+                return intern.get();
+            }
+            return null;
         }
-        catch (NullPointerException e){
-            com.alain.dto.Intern intern = new com.alain.dto.Intern();
-            intern.setIdIntern(BigInteger.valueOf(0));
-            return intern;
+        catch (Exception e){
+            return null;
+        }
+    }
+
+    /*
+    Find the cache value for a specific input key
+ */
+    public synchronized com.alain.model.Intern getCacheValueWithoutLog(Long key){
+        try{
+            Optional<com.alain.model.Intern> intern = this.redisService.getAnInternById(key);
+            if(intern.isPresent()){
+                return intern.get();
+            }
+            return null;
+        }
+        catch (Exception e){
+            return null;
         }
     }
 
@@ -90,26 +107,30 @@ public class InternsManagementHttpApiService {
     /*
     Send to the GetQueue the XML intern with only an ID that has to be found in DB and returned to the client
      */
-    public Intern getAnInternById(Long id) throws InterruptedException {
+    public Intern getAnInternById(Long id) {
+        /*
+        Prepare to send the InternXml into Get Request Queue
+         */
         com.alain.dto.Intern internXml = new com.alain.dto.Intern();
-        com.alain.dto.Intern cacheResult = new com.alain.dto.Intern();
-
         internXml.setIdIntern(BigInteger.valueOf(id));
+        ///Send it
         this.jmsProducer.sendMessageForGetById(internXml);
+
 
         long currentTime = System.currentTimeMillis();
         long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime);
 
         while(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - timeSeconds < 5  &&
-        this.getCacheValue(BigInteger.valueOf(id)).getIdIntern() == BigInteger.valueOf(0)) {
-            this.getCacheValue(BigInteger.valueOf(id));
+        this.getCacheValueWithoutLog(id) == null) {
+            this.getCacheValueWithoutLog(id);
         }
-        cacheResult =  this.getCacheValue(BigInteger.valueOf(id));
+        com.alain.model.Intern cacheResult = this.getCacheValue(id);
 
-        if(cacheResult.getIdIntern() == BigInteger.valueOf(0)) {
-            logger.info("[TIME OUT] OCCURRED");
+        if(cacheResult == null) {
+            logger.info("[TIME OUT] OCCURRED INTERN DOES NOT EXIST");
+            return null;
         }
-        Intern finalResult = InternMapper.MAPPER.fromXmlToJsonIntern(cacheResult);
+        Intern finalResult = InternMapper.MAPPER.fromEntityToJson(cacheResult);
         return finalResult;
     }
 
@@ -117,27 +138,17 @@ public class InternsManagementHttpApiService {
         Check first if the cache got the intern that the client is asking for
         If not, send the id to the get request queue
      */
-
-
-    public Intern getAnInternByIdInCacheOrDb(Long id) throws InterruptedException {
-        /*com.alain.dto.Intern isInternPresentInCache = this.getCacheValue(BigInteger.valueOf(id));
-        if(isInternPresentInCache.getIdIntern() != BigInteger.valueOf(0)){
-            System.out.println(isInternPresentInCache.getIdIntern());
-            System.out.println(BigInteger.valueOf(0));
+    public Intern getAnInternByIdInCacheOrDb(Long id){
+        com.alain.model.Intern isInternPresentInCache = this.getCacheValueWithoutLog(id);
+        if(isInternPresentInCache != null){
             logger.info("[CACHE] INTERN ALREADY IN CACHE");
-            Intern finalResult = InternMapper.MAPPER.fromXmlToJsonIntern(isInternPresentInCache);
+            Intern finalResult = InternMapper.MAPPER.fromEntityToJson(isInternPresentInCache);
             return finalResult;
         }
         else {
             logger.info("[CACHE] INTERN NOT IN CACHE");
             return this.getAnInternById(id);
-        }*/
-        com.alain.dto.Intern internXml = new com.alain.dto.Intern();
-        com.alain.dto.Intern cacheResult = new com.alain.dto.Intern();
-
-        internXml.setIdIntern(BigInteger.valueOf(id));
-        this.jmsProducer.sendMessageForGetById(internXml);
-        return null;
+        }
     }
 
 
