@@ -4,7 +4,7 @@ package com.alain.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash("Intern")
+@RedisHash(value = "Intern",timeToLive = 15)
 public class Intern {
 
     @Id
