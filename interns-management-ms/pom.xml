@@ -18,6 +18,7 @@
 		<module>interns-management-http-api</module>
 		<module>interns-management-service</module>
 		<module>interns-management-dto</module>
+		<module>interns-management-dto-queue</module>
 		<module>interns-management-worker</module>
 	</modules>
 	<dependencies>

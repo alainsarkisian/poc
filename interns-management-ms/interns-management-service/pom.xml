@@ -27,7 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>alain</groupId>
-			<artifactId>interns-management-dto</artifactId>
+			<artifactId>interns-management-dto-queue</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

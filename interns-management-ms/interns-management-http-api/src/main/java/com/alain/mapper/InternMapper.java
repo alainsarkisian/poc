@@ -11,10 +11,15 @@ public interface InternMapper {
     @Mapping(source = "idIntern", target = "idInter")
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target= "lastName")
-    com.alain.dto.json.Intern fromXmlToEntityIntern(Intern intern);
+    com.alain.dto.json.Intern fromEntityToJson(com.alain.model.Intern cacheResult);
+
+    @Mapping(source = "idInter", target = "idIntern")
+    @Mapping(source = "firstName", target = "firstName")
+    @Mapping(source = "lastName", target = "lastName")
+    Intern fromJsonToXmlIntern(com.alain.dto.json.Intern intern);
 
     @Mapping(source = "idIntern", target = "idInter")
     @Mapping(source = "firstName", target = "firstName")
-    @Mapping(source = "lastName", target= "lastName")
-    com.alain.dto.json.Intern fromEntityToJson(com.alain.model.Intern cacheResult);
+    @Mapping(source = "lastName", target = "lastName")
+    com.alain.dto.json.Intern fromXmlInternToJsonIntern(Intern intern);
 }

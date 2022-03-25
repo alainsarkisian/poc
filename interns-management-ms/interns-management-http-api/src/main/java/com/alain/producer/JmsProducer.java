@@ -1,10 +1,9 @@
 package com.alain.producer;
 
 import com.alain.dto.json.Intern;
-import com.alain.dto.mapper.InternMapper;
+import com.alain.mapper.InternMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import java.util.logging.Logger;
