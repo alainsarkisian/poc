@@ -1,10 +1,10 @@
 package com.alain.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MarshallingMessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -14,15 +14,17 @@ import javax.jms.ConnectionFactory;
 
 @EnableJms
 @Configuration
+@RequiredArgsConstructor
 //@ConditionalOnBean(value = { ConnectionFactory.class })
 public class JmsConfig {
-    @Autowired
-    private ConnectionFactory connectionFactory;
+
+    private final ConnectionFactory connectionFactory;
 
     /*
         Produce for post request
     */
-    @Bean("PostRequestProducer")
+    @Bean
+    @Qualifier("PostRequestProducer")
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setDefaultDestinationName("PostRequestQueue");
@@ -40,7 +42,8 @@ public class JmsConfig {
     /*
     Produce for get request
     */
-    @Bean("GetByIdRequestProducer")
+    @Bean
+    @Qualifier("GetByIdRequestProducer")
     public JmsTemplate jmsTemplateForGet() {
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setDefaultDestinationName("GetByIdRequestQueue");
@@ -54,24 +57,4 @@ public class JmsConfig {
         jmsTemplate.setMessageConverter(converter);
         return jmsTemplate;
     }
-
-    /*
-        Consume for get response
-
-    @Bean("GetByIdResponseConsumer")
-    public DefaultJmsListenerContainerFactory myQueueConsumerJmsListenerContainerFactory() {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setSessionTransacted(true);
-        MarshallingMessageConverter converter = new MarshallingMessageConverter();
-        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContextPath("com.alain.dto");
-        converter.setMarshaller(marshaller);
-        converter.setUnmarshaller(marshaller);
-        converter.setTargetType(MessageType.TEXT);
-        factory.setMessageConverter(converter);
-        return factory;
-    }
-
-     */
 }

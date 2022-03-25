@@ -2,6 +2,7 @@ package com.alain.service;
 
 import com.alain.mapper.InternMapper;
 import com.alain.model.Intern;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
@@ -9,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.logging.Logger;
 
 @Component
+@RequiredArgsConstructor
 public class JmsProducer {
 
-    @Autowired
     @Qualifier("GetByIdResponseProducer")
-    private JmsTemplate jmsTemplate;
+    private final JmsTemplate jmsTemplate;
 
     final Logger logger = Logger.getLogger(String.valueOf(JmsProducer.class));
 

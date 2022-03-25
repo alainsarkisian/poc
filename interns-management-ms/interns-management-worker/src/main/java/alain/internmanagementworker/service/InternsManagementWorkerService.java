@@ -3,6 +3,7 @@ package alain.internmanagementworker.service;
 import alain.internmanagementworker.mapper.InternMapper;
 import alain.internmanagementworker.model.Intern;
 import alain.internmanagementworker.repository.InternsManagementWorkerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -11,16 +12,16 @@ import org.springframework.stereotype.Service;
 import java.util.logging.Logger;
 
 @Service
+@RequiredArgsConstructor
 public class InternsManagementWorkerService {
-    @Autowired
-    private InternsManagementWorkerRepository internsManagementWorkerRepository;
+
+    private final InternsManagementWorkerRepository internsManagementWorkerRepository;
 
     static Logger logger = Logger.getLogger(String.valueOf(InternsManagementWorkerService.class));
 
     public void addAnIntern(Intern intern){
         this.internsManagementWorkerRepository.save(intern);
     }
-
 
     @JmsListener(destination = "GetByIdResponseQueue", containerFactory = "GetByIdResponseConsumer")
     public void receiveFromGetRequest(@Payload com.alain.dto.Intern internXml) {

@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 
 @KeycloakConfiguration
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
     @Autowired
     public void configureGlobal(
             AuthenticationManagerBuilder auth) throws Exception {
@@ -35,25 +36,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        /*
-        http.authorizeRequests()
-                .antMatchers("/api/v1/interns-management/interns")
-                .hasAnyRole()
-                .anyRequest()
-                .permitAll();
-         */
-        /*http.csrf().disable().authorizeRequests()
-                .antMatchers("/api/v1/interns-management/**").permitAll()
-                .antMatchers("/api/v1/interns-management/interns").permitAll()
-                .anyRequest().authenticated();
-
-
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/api/v1/interns-management/**")
-                .hasRole("user")
-                .anyRequest()
-                .permitAll();
-         */
         http.csrf().disable().authorizeRequests()
                 .anyRequest().authenticated();
     }

@@ -3,25 +3,22 @@ package com.alain.service;
 import com.alain.dto.Intern;
 import com.alain.mapper.InternMapper;
 import com.alain.repository.InternsManagementServiceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
 @Service
+@RequiredArgsConstructor
 public class InternsManagementService {
 
-    @Autowired
-    private InternsManagementServiceRepository internsManagementServiceRepository;
+    private final InternsManagementServiceRepository internsManagementServiceRepository;
 
-    @Autowired
-    private JmsProducer jmsProducer;
+    private final JmsProducer jmsProducer;
 
     final static Logger logger = Logger.getLogger(String.valueOf(InternsManagementService.class));
 
@@ -48,8 +45,8 @@ public class InternsManagementService {
      */
    @JmsListener(destination = "PostRequestQueue", containerFactory = "PostRequestConsumer")
     public void receiveFromPostRequest(@Payload Intern internXml) {
-       logger.info("[CONSUMING : GET] {" +
-               ", First_Name : " + internXml.getFirstName() +
+       logger.info("[CONSUMING : POST] {" +
+               "First_Name : " + internXml.getFirstName() +
                ", Last_Name : " + internXml.getLastName() +"}");
        com.alain.model.Intern internEntity = InternMapper.MAPPER.fromXmlToEntityIntern(internXml);
        this.addAnInternFromEntity(internEntity);
@@ -106,9 +103,6 @@ public class InternsManagementService {
 
     }
 
-
-
-
     /*
     Produce
         public Intern getAnInternById(Long id){
@@ -116,6 +110,4 @@ public class InternsManagementService {
     }
 
      */
-
-
 }

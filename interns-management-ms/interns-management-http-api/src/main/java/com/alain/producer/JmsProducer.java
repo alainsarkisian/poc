@@ -1,25 +1,26 @@
-package com.alain.service;
+package com.alain.producer;
 
 import com.alain.dto.json.Intern;
 import com.alain.dto.mapper.InternMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import java.util.logging.Logger;
 
 @Component
+@RequiredArgsConstructor
 public class JmsProducer {
 
     final Logger logger = Logger.getLogger(String.valueOf(JmsProducer.class));
 
-    @Autowired
     @Qualifier("PostRequestProducer")
-    private JmsTemplate jmsTemplate;
+    private final JmsTemplate jmsTemplate;
 
-    @Autowired
+    ///private final JmsTemplateExtender jmsTemplate;
     @Qualifier("GetByIdRequestProducer")
-    private JmsTemplate jmsTemplateForGet;
+    private final JmsTemplate jmsTemplateForGet;
 
     /*
         Produce for post

@@ -2,16 +2,16 @@ package com.alain.service;
 
 import com.alain.model.Intern;
 import com.alain.repository.RedisRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RedisService {
 
-    @Autowired
-    private RedisRepository redisRepository;
+    private final RedisRepository redisRepository;
 
     public Optional<Intern> getAnInternById(Long id){
         return this.redisRepository.findById(id);

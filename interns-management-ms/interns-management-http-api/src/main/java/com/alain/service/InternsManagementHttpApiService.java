@@ -3,6 +3,8 @@ package com.alain.service;
 
 import com.alain.dto.json.Intern;
 import com.alain.mapper.InternMapper;
+import com.alain.producer.JmsProducer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -16,36 +18,14 @@ import java.util.logging.Logger;
 
 @Component
 @Service
+@RequiredArgsConstructor
 public class InternsManagementHttpApiService {
 
-    @Autowired
-    private JmsProducer jmsProducer;
+    private final JmsProducer jmsProducer;
 
-    @Autowired
-    private RedisService redisService;
-    //private CacheSingleton cacheSingleton;
+    private final RedisService redisService;
 
     static Logger logger = Logger.getLogger(String.valueOf(InternsManagementHttpApiService.class));
-
-    /*
-        Add response from Get to the cache
-
-    public synchronized boolean updateCache(com.alain.dto.Intern internXml){
-        boolean isUpdated = false;
-        try {
-            this.cacheSingleton.getCache().put(internXml.getIdIntern(), internXml);
-            logger.info("[CACHE] ADDED " +
-                    "Intern_ID : " + internXml.getIdIntern() +
-                    ", First_Name : " + internXml.getFirstName() +
-                    ", Last_Name : " + internXml.getLastName() +"}");
-            isUpdated = true;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-            return isUpdated;
-    }
-     */
 
     /*
         Find the cache value for a specific input key
@@ -68,8 +48,8 @@ public class InternsManagementHttpApiService {
     }
 
     /*
-    Find the cache value for a specific input key
- */
+        Find the cache value for a specific input key
+    */
     public synchronized com.alain.model.Intern getCacheValueWithoutLog(Long key){
         try{
             Optional<com.alain.model.Intern> intern = this.redisService.getAnInternById(key);
@@ -82,20 +62,6 @@ public class InternsManagementHttpApiService {
             return null;
         }
     }
-
-    /*
-    Consume from Get Response Queue
-
-    @JmsListener(destination = "GetByIdResponseQueue", containerFactory = "GetByIdResponseConsumer")
-    public void receiveFromGetRequest(@Payload com.alain.dto.Intern internXml) {
-        logger.info("[CONSUMING : GET] {" +
-                "Intern_ID : " + internXml.getIdIntern() +
-                ", First_Name : " + internXml.getFirstName() +
-                ", Last_Name : " + internXml.getLastName() +"}");
-        this.updateCache(internXml);
-    }
-
-     */
 
     /*
     Send to the PostQueue the XML intern that has to be saved in DB

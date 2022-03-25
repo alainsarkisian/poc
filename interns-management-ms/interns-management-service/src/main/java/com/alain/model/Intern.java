@@ -1,9 +1,17 @@
 package com.alain.model;
 
+
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="Intern")
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Intern {
 
     @Id
@@ -17,36 +25,4 @@ public class Intern {
     @Column(name = "lastName")
     private String lastName;
 
-    public Long getIdIntern() {
-        return idIntern;
-    }
-
-    public void setIdIntern(Long idIntern) {
-        this.idIntern = idIntern;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Override
-    public String toString() {
-        return "Intern{" +
-                "idIntern=" + idIntern +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 }
