@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
     No need to also "give access" to an interface which is in a module that contains also packages like
     JmsConfig or even SecurityConfig
  */
-@RequestMapping("api/v1/interns-management-ms/")
+//@RequestMapping("api/v1/interns-management-ms/")
 public interface InternsManagementHttpApiInterface {
-
+    public static final String PATH = "api/v1/interns-management-ms/";
     @GetMapping("interns/{id}")
     Intern getAnInternById(@PathVariable Long id) throws InterruptedException;
 

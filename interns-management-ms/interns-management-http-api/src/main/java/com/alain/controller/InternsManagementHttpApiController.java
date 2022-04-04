@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
-
+@RequestMapping("api/v1/interns-management-ms/")
 @RestController
 @RequiredArgsConstructor //Thanks to lombok, no need to define manually a constructor with args
 /*
