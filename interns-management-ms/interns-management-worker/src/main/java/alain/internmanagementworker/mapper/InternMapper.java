@@ -12,5 +12,4 @@ public interface InternMapper {
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target= "lastName")
     alain.internmanagementworker.model.Intern fromXmlToEntityIntern(Intern intern);
-
 }
