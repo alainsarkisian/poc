@@ -1,0 +1,12 @@
+2022-04-15 16:09:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INTERN" non trouvée
+Table "INTERN" not found; SQL statement:
+select intern0_.id_intern as id_inter1_0_0_, intern0_.first_name as first_na2_0_0_, intern0_.last_name as last_nam3_0_0_ from intern intern0_ where intern0_.id_intern=? [42102-200]
+2022-04-15 16:10:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INTERN" non trouvée
+Table "INTERN" not found; SQL statement:
+select intern0_.id_intern as id_inter1_0_0_, intern0_.first_name as first_na2_0_0_, intern0_.last_name as last_nam3_0_0_ from intern intern0_ where intern0_.id_intern=? [42102-200]
+2022-04-15 16:12:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INTERN" non trouvée
+Table "INTERN" not found; SQL statement:
+select intern0_.id_intern as id_inter1_0_0_, intern0_.first_name as first_na2_0_0_, intern0_.last_name as last_nam3_0_0_ from intern intern0_ where intern0_.id_intern=? [42102-200]

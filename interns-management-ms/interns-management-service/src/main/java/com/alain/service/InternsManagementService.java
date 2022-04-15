@@ -99,8 +99,10 @@ public class InternsManagementService {
             logger.warning("ID DOES NOT EXIST");
             return;
         }
+    }
 
-
+    public com.alain.model.Intern findByFirstName(String firstName){
+        return this.internsManagementServiceRepository.findByFirstName(firstName);
     }
 
     /*
