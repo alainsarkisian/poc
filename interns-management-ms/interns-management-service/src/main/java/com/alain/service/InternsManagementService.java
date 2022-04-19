@@ -101,7 +101,7 @@ public class InternsManagementService {
         }
     }
 
-    public com.alain.model.Intern findByFirstName(String firstName){
+    public Optional<com.alain.model.Intern> findByFirstName(String firstName){
         return this.internsManagementServiceRepository.findByFirstName(firstName);
     }
 
